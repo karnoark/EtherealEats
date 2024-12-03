@@ -10,7 +10,8 @@
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "imageWidth": 100,
+      "backgroundColor": "#232323"
     },
     "ios": {
       "supportsTablet": true
@@ -18,8 +19,9 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "backgroundColor": "#618464"
+      },
+      "package": "com.anonymous.EtherealEats"
     },
     "web": {
       "bundler": "metro",
