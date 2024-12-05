@@ -1,4 +1,4 @@
-package com.anonymous.EtherealEats
+package com.etherealeats.app
 
 import android.os.Build
 import android.os.Bundle

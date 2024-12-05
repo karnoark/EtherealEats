@@ -1,4 +1,4 @@
-package com.anonymous.EtherealEats
+package com.etherealeats.app
 
 import android.app.Application
 import android.content.res.Configuration
