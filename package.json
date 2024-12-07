@@ -8,11 +8,18 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
-    "lint": "expo lint",
-    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "lint": "eslint . --config .eslintrc.js",
+    "lint:fix": "eslint . --fix",
+    "lint:dev": "eslint . --config .eslintrc.dev.js",
+    "lint:mid": "eslint . --config .eslintrc.mid.js",
+    "lint:prod": "eslint . --config .eslintrc.prod.js",
+    "lint:fix:dev": "eslint . --config .eslintrc.dev.js --fix",
+    "lint:fix:mid": "eslint . --config .eslintrc.mid.js --fix",
+    "lint:fix:prod": "eslint . --config .eslintrc.prod.js --fix",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
-    "typecheck:strict": "tsc --noEmit --project tsconfig.strict.json"
+    "typecheck:strict": "tsc --noEmit --project tsconfig.strict.json",
+    "prebuild": "npx expo prebuild --clean"
   },
   "jest": {
     "preset": "jest-expo"
