@@ -1,3 +1,8 @@
 import { createContext } from 'react';
 
-export const UserReversedGeoCode = createContext(null);
+import { Address } from '@/types/common';
+
+export const UserReversedGeoCode = createContext<{
+  address: Address | null;
+  setAddress: (address: Address) => void;
+} | null>(null);

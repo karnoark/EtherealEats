@@ -30,6 +30,15 @@ module.exports = {
 
     //god known what this ban types is, disabling it for time being
     '@typescript-eslint/ban-types': 'off',
+
+    // Disabled rules for development speed
+    '@typescript-eslint/func-call-spacing': 'off',
+    '@typescript-eslint/no-unused-vars': 'off',
+    // 'no-unused-vars': 'off',
+    'prettier/prettier': 0,
+
+    //Ahh... Why these rules are still here
+    'react/react-in-jsx-scope': 'off',
   },
 
   overrides: [
