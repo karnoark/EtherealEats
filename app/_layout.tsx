@@ -57,7 +57,7 @@ const getLocationWithTimeout = async (timeoutMs: number = 15000) => {
 };
 
 export default function RootLayout() {
-  const [location, setLocation] = useState<Location.LocationObject>();
+  const [location, setLocation] = useState<Location.LocationObject | null>();
   const [address, setAddress] = useState<Address | null>(null);
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -85,6 +85,7 @@ export default function RootLayout() {
 
       if (result.success && result.location) {
         console.log('user Location here', result.location);
+        // Example log: user Location here {"coords": {"accuracy": 20, "altitude": 516.3999633789062, "altitudeAccuracy": 1.9804165363311768, "heading": 0, "latitude": 16.8491538, "longitude": 74.5984552, "speed": 0}, "mocked": false, "timestamp": 1733653924331}
         setLocation(result.location);
       } else {
         setErrorMsg(
@@ -108,7 +109,7 @@ export default function RootLayout() {
 
   return (
     <UserLocationContext.Provider
-      value={{ location: location ?? undefined, setLocation }}
+      value={{ location: location ?? null, setLocation }}
     >
       <UserReversedGeoCode.Provider value={{ address, setAddress }}>
         <Stack>
