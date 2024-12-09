@@ -1,8 +1,13 @@
-import { createContext } from 'react';
+import * as Location from 'expo-location';
+import { createContext, Dispatch, SetStateAction } from 'react';
 
-import { Address } from '@/types/common';
+// import { Address } from '@/types/common';
 
-export const UserReversedGeoCode = createContext<{
-  address: Address | null;
-  setAddress: (address: Address) => void;
-} | null>(null);
+export interface AddressContext {
+  address: Location.LocationGeocodedAddress[] | null;
+  setAddress: Dispatch<
+    SetStateAction<Location.LocationGeocodedAddress[] | null>
+  >;
+}
+
+export const UserReversedGeoCode = createContext<AddressContext | null>(null);

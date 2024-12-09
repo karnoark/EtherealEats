@@ -39,6 +39,14 @@ module.exports = {
 
     //Ahh... Why these rules are still here
     'react/react-in-jsx-scope': 'off',
+
+    // require() is recommended for images and fonts import
+    '@typescript-eslint/no-require-imports': [
+      'error',
+      {
+        allow: ['./assets/*'],
+      },
+    ],
   },
 
   overrides: [

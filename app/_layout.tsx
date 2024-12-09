@@ -8,24 +8,27 @@ import 'react-native-reanimated';
 import Fonts from '@/constants/fonts';
 import { UserLocationContext } from '@/context/UserLocationContext';
 import { UserReversedGeoCode } from '@/context/UserReversedGeoCode';
-import { Address } from '@/types/common';
+// import { Address } from '@/types/common';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-const defaultAddresss: Address = {
-  city: 'Shanghai',
-  country: 'China',
-  district: 'Pudong',
-  isoCountryCode: 'CN',
-  name: '33 East Nanjing Rd',
-  postalCode: '94108',
-  region: 'SH',
-  street: 'Stockton St',
-  streetNumber: '1',
-  subregion: 'San Francisco County',
-  timezone: 'America/Los_Angeles',
-};
+const defaultAddresss: Location.LocationGeocodedAddress[] = [
+  {
+    city: 'Shanghai',
+    country: 'China',
+    district: 'Pudong',
+    isoCountryCode: 'CN',
+    name: '33 East Nanjing Rd',
+    postalCode: '94108',
+    region: 'SH',
+    street: 'Stockton St',
+    streetNumber: '1',
+    subregion: 'San Francisco County',
+    timezone: 'America/Los_Angeles',
+    formattedAddress: 'formattedAddress',
+  },
+];
 
 const getLocationWithTimeout = async (timeoutMs: number = 15000) => {
   try {
@@ -58,7 +61,9 @@ const getLocationWithTimeout = async (timeoutMs: number = 15000) => {
 
 export default function RootLayout() {
   const [location, setLocation] = useState<Location.LocationObject | null>();
-  const [address, setAddress] = useState<Address | null>(null);
+  const [address, setAddress] = useState<
+    Location.LocationGeocodedAddress[] | null
+  >(null);
   const [errorMsg, setErrorMsg] = useState('');
 
   const [fontsLoaded] = useFonts(Fonts);
