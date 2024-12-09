@@ -6,9 +6,19 @@ import { useCallback, useEffect, useState } from 'react';
 
 import 'react-native-reanimated';
 import Fonts from '@/constants/fonts';
-import { UserLocationContext } from '@/context/UserLocationContext';
-import { UserReversedGeoCode } from '@/context/UserReversedGeoCode';
-// import { Address } from '@/types/common';
+import {
+  UserLocationContext,
+  LocationProvider,
+} from '@/context/UserLocationContext';
+import {
+  AddressProvider,
+  UserReversedGeoCode,
+} from '@/context/UserReversedGeoCode';
+import {
+  LocationPermissionError,
+  LocationService,
+} from '@/services/locationService';
+import { promiseWithTimeout, TimeoutError } from '@/utils/promiseWithTimeout';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -30,41 +40,15 @@ const defaultAddresss: Location.LocationGeocodedAddress[] = [
   },
 ];
 
-const getLocationWithTimeout = async (timeoutMs: number = 15000) => {
-  try {
-    //Create a promise that rejects after timeout
-    const timeoutPromise = new Promise((_, reject) => {
-      setTimeout(() => {
-        reject(new Error());
-      }, timeoutMs);
-    });
-
-    //Race between location request and timeout
-    const location = await Promise.race([
-      Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Highest }),
-      timeoutPromise,
-    ]);
-
-    return {
-      success: true,
-      location: location as Location.LocationObject,
-      error: null,
-    };
-  } catch (error) {
-    return {
-      success: false,
-      location: null,
-      error: error instanceof Error ? error.message : 'failed to get location',
-    };
-  }
-};
-
 export default function RootLayout() {
   const [location, setLocation] = useState<Location.LocationObject | null>();
   const [address, setAddress] = useState<
     Location.LocationGeocodedAddress[] | null
   >(null);
-  const [errorMsg, setErrorMsg] = useState('');
+  const [locationError, setLocationError] = useState<string | null>(null);
+  const [isLoadingLocation, setIsLoadingLocation] = useState(true);
+  const [retryAttempt, setRetryAttempt] = useState(0);
+  const MAX_RETRIES = 3;
 
   const [fontsLoaded] = useFonts(Fonts);
 
@@ -74,54 +58,78 @@ export default function RootLayout() {
     }
   }, [fontsLoaded]);
 
+  // Initialize location with retry mechanism
+  const initializeLocation = useCallback(async () => {
+    setIsLoadingLocation(true);
+    setLocationError(null);
+
+    try {
+      // First try to get a quick, low-accuracy location
+      const quickLocation = await LocationService.getLowAccuracyLocation();
+      setLocation(quickLocation);
+
+      // Then get more precise location
+      const preciseLocation = await LocationService.getCurrentLocation();
+      setLocation(preciseLocation);
+
+      // Get address for the precise location
+      const locationAddress = await LocationService.getAddress(preciseLocation);
+      setAddress(locationAddress);
+    } catch (error) {
+      console.error('Location initialization error:', error);
+
+      if (error instanceof LocationPermissionError) {
+        setLocationError(
+          'Please enable location access in settings for delivery updates',
+        );
+      } else if (error instanceof TimeoutError) {
+        // Implement exponential backoff for retries
+        if (retryAttempt < MAX_RETRIES) {
+          const retryDelay = Math.pow(2, retryAttempt) * 1000; // Exponential backoff
+          setTimeout(() => {
+            setRetryAttempt(prev => prev + 1);
+            initializeLocation();
+          }, retryDelay);
+        } else {
+          setLocationError(
+            'Unable to get your location. Please try again later.',
+          );
+        }
+      } else {
+        setLocationError('Unable to determine your location');
+      }
+    } finally {
+      setIsLoadingLocation(false);
+    }
+  }, [retryAttempt]);
+
   useEffect(() => {
     if (fontsLoaded) {
       onLayoutRootView();
+      initializeLocation();
     }
-    (async () => {
-      setAddress(defaultAddresss);
-      const status = await Location.requestForegroundPermissionsAsync();
-      if (!status.granted) {
-        setErrorMsg('Permission to access location is denied');
-      }
-
-      // Get location with 10 seconds timeout
-      const result = await getLocationWithTimeout(10000);
-
-      if (result.success && result.location) {
-        console.log('user Location here', result.location);
-        // Example log: user Location here {"coords": {"accuracy": 20, "altitude": 516.3999633789062, "altitudeAccuracy": 1.9804165363311768, "heading": 0, "latitude": 16.8491538, "longitude": 74.5984552, "speed": 0}, "mocked": false, "timestamp": 1733653924331}
-        setLocation(result.location);
-      } else {
-        setErrorMsg(
-          'Unable to get your location. Please check your GPS settings.',
-        );
-        // Optionally fall back to last known location or default location
-        // TODO  if the error is due to user haven't given the location access, then display the grant location access again
-        // ? claude suggested "Adding error boundary handling for unexpected location service failures" I'm not sure what that is
-        //TODO Consider Showing a loading indicator while waiting for the location
-        // TODO Consider Implementing a retry mechanism with exponential backoff
-        //TODO Consider Caching the last known location as a fallback
-        //TODO Consider Using a less accurate location first, then upgrading to high accuracy
-        //TODO Consider Having a default location for your service area if location services fail
-      }
-    })();
-  }, [fontsLoaded, onLayoutRootView]);
+  }, [fontsLoaded, onLayoutRootView, initializeLocation]);
 
   if (!fontsLoaded) {
     return null;
   }
 
   return (
-    <UserLocationContext.Provider
-      value={{ location: location ?? null, setLocation }}
+    <LocationProvider
+      value={{
+        location: location ?? null,
+        setLocation,
+        isLoading: isLoadingLocation,
+        error: locationError,
+        retry: initializeLocation,
+      }}
     >
-      <UserReversedGeoCode.Provider value={{ address, setAddress }}>
+      <AddressProvider value={{ address, setAddress }}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
         </Stack>
-      </UserReversedGeoCode.Provider>
-    </UserLocationContext.Provider>
+      </AddressProvider>
+    </LocationProvider>
   );
 }
