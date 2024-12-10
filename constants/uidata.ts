@@ -1,10 +1,28 @@
-const categories = [
+import { ImageSourcePropType } from 'react-native';
+
+export interface Category {
+  _id: string;
+  title: string;
+  value: string;
+  imageUrl: string;
+  createdAt?: string;
+  updatedAt?: string;
+  __v: 0;
+}
+
+export interface Choice {
+  id: number;
+  name: string;
+  value: string;
+}
+
+const categories: Category[] = [
   {
     _id: '6537ece708ff5b7de97d0695',
     title: 'Fried Rice',
     value: 'fried_rice',
     imageUrl:
-      'https://d326fntlu7tb1e.cloudfront.net/uploads/4a4cd06e-94de-4478-8588-66eee01354d4-rice.png',
+      'https://res.cloudinary.com/dtanzpdjc/image/upload/v1733826943/dbcujqs1yhprc8ojomwc.png',
     createdAt: '2023-10-24T16:12:23.571Z',
     updatedAt: '2023-10-24T16:12:23.571Z',
     __v: 0,
@@ -14,7 +32,7 @@ const categories = [
     title: 'Curry',
     value: 'curry',
     imageUrl:
-      'https://d326fntlu7tb1e.cloudfront.net/uploads/ee2d952c-1d7d-48f7-81b3-cb967343eb6c-curry.png',
+      'https://res.cloudinary.com/dtanzpdjc/image/upload/v1733826943/qv7jsxc9imwulm8dwki6.png',
     __v: 0,
   },
   {
@@ -22,7 +40,7 @@ const categories = [
     title: 'Pizza',
     value: 'pizza',
     imageUrl:
-      'https://d326fntlu7tb1e.cloudfront.net/uploads/466693e6-f999-42e0-8794-09325ece1b45-Pizza.png',
+      'https://res.cloudinary.com/dtanzpdjc/image/upload/v1733826944/ktzuwodct5jsp5iy5b0s.png',
     __v: 0,
   },
   {
@@ -30,7 +48,7 @@ const categories = [
     title: 'Pasta',
     value: 'pasta',
     imageUrl:
-      'https://d326fntlu7tb1e.cloudfront.net/uploads/6645cf41-bc89-4dd0-9f80-bba9487633b2-Spaghetti.png',
+      'https://res.cloudinary.com/dtanzpdjc/image/upload/v1733826943/dpeeij6vkgjf71gnxjyu.png',
     __v: 0,
   },
   {
@@ -38,7 +56,7 @@ const categories = [
     title: 'Beverages',
     value: 'beverages',
     imageUrl:
-      'https://d326fntlu7tb1e.cloudfront.net/uploads/93c4b3df-9e55-4308-a834-9fe4ad67c0b3-bar.png',
+      'https://res.cloudinary.com/dtanzpdjc/image/upload/v1733826943/fx2wmysnq90vlntuctks.png',
     __v: 0,
   },
   {
@@ -46,7 +64,7 @@ const categories = [
     title: 'Burgers',
     value: 'burgers',
     imageUrl:
-      'https://d326fntlu7tb1e.cloudfront.net/uploads/3c94bc09-b8b9-4961-accb-f68b7e8121cc-Hamburger.png',
+      'https://res.cloudinary.com/dtanzpdjc/image/upload/v1733826943/xelsmteweqo4btiy3pph.png',
     __v: 0,
   },
   {
@@ -54,7 +72,7 @@ const categories = [
     title: 'Chicken',
     value: 'chicken',
     imageUrl:
-      'https://d326fntlu7tb1e.cloudfront.net/uploads/139718b2-2832-40c5-8d7b-11fd9feb0aac-chicken.png',
+      'https://res.cloudinary.com/dtanzpdjc/image/upload/v1733826943/rztypjc7ig6gzmnxww5z.png',
     __v: 0,
   },
   {
@@ -62,7 +80,7 @@ const categories = [
     title: 'More',
     value: 'more',
     imageUrl:
-      'https://d326fntlu7tb1e.cloudfront.net/uploads/08323562-a3c6-461d-95a3-b3817c99871b-more.png',
+      'https://res.cloudinary.com/dtanzpdjc/image/upload/v1733827441/menu_isn9yv.png',
     __v: 0,
   },
 ];
@@ -469,4 +487,33 @@ const profile = {
   updatedAt: '2023-10-24T11:02:28.215Z',
 };
 
-export default { categories, restaurants, foods, cart, profile };
+const choicesList: Choice[] = [
+  {
+    id: 1,
+    name: 'Pick Up',
+    value: 'pickup',
+  },
+
+  {
+    id: 2,
+    name: '4 star',
+    value: '4star',
+  },
+  {
+    id: 3,
+    name: '3 star',
+    value: '3star',
+  },
+  {
+    id: 4,
+    name: 'Under 30 min',
+    value: 'under30',
+  },
+  {
+    id: 5,
+    name: 'Recommended',
+    value: 'recommended',
+  },
+];
+
+export default { categories, restaurants, foods, cart, profile, choicesList };

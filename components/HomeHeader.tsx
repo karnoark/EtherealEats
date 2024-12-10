@@ -13,7 +13,21 @@ import { promiseWithTimeout, TimeoutError } from '@/utils/promiseWithTimeout';
 
 import AssetImage from './AssetImage';
 
-const Page = () => {
+const getTimeOfDay = () => {
+  const now = new Date();
+  const hour = now.getHours();
+
+  if (hour >= 0 && hour < 12) {
+    return '🌞';
+  } else if (hour >= 12 && hour < 17) {
+    return '⛅';
+  } else {
+    return '🌙';
+  }
+};
+
+const HomeHeader = () => {
+  const [time, setTime] = useState<string | null>(null);
   const { location, setLocation } = useLocationContext();
   const { address, setAddress }: AddressContextType = useAddressContext();
   const [addressError, setAddressError] = useState<string | null>(null);
@@ -30,11 +44,14 @@ const Page = () => {
           console.log('HomeHeader location:', location);
 
           const reversedAddress = await LocationService.getAddress(location);
+          const greetings = getTimeOfDay();
+          console.log('greetings', greetings);
 
           // Even though setAddress is synchronous, we're still in an async context
           // By the time we reach here, the component might be unmounted
           if (isMounted) {
             setAddress(reversedAddress ?? null);
+            setTime(greetings ?? '🍛');
           }
         } catch (error) {
           if (isMounted) {
@@ -59,10 +76,16 @@ const Page = () => {
     }
     // Disabling following rule because I Removed setAddress from dependencies since setState functions are stable and don't need to be included
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location]);
+  }, [location, time]);
 
   return (
-    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+    <View
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      }}
+    >
       <View style={styles.outerStyle}>
         <AssetImage
           data={require('@/assets/images/george.jpg')}
@@ -87,11 +110,12 @@ const Page = () => {
           )}
         </View>
       </View>
+      <Text style={{ fontSize: 30 }}>{time}</Text>
     </View>
   );
 };
 
-export default Page;
+export default HomeHeader;
 
 const styles = StyleSheet.create({
   outerStyle: {

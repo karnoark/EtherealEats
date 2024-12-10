@@ -17,7 +17,7 @@ interface AssetImageProps {
   mode: ResizeMode;
 }
 
-const Page = ({ data, width, height, radius, mode }: AssetImageProps) => {
+const AssetImage = ({ data, width, height, radius, mode }: AssetImageProps) => {
   return (
     <View>
       <Image
@@ -28,7 +28,7 @@ const Page = ({ data, width, height, radius, mode }: AssetImageProps) => {
   );
 };
 
-export default Page;
+export default AssetImage;
 
 const getImageStyles = (
   width: number,
