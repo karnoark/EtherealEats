@@ -2,10 +2,12 @@ import { useFonts } from 'expo-font';
 import * as Location from 'expo-location';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
+import { StatusBar } from 'expo-status-bar';
 import { useCallback, useEffect, useState } from 'react';
 
 import 'react-native-reanimated';
 import Fonts from '@/constants/fonts';
+import { COLORS } from '@/constants/theme';
 import {
   UserLocationContext,
   LocationProvider,
@@ -125,6 +127,11 @@ export default function RootLayout() {
       }}
     >
       <AddressProvider value={{ address, setAddress }}>
+        <StatusBar
+          style="dark"
+          hidden={false}
+          backgroundColor={COLORS.lightWhite}
+        />
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />

@@ -16,6 +16,75 @@ export interface Choice {
   value: string;
 }
 
+// Represents the geographical coordinates and location details of a restaurant
+export interface RestaurantCoordinates {
+  id: string;
+  latitude: number;
+  longitude: number;
+  address: string;
+  title: string;
+  latitudeDelta: number;
+  longitudeDelta: number;
+}
+
+export interface Restaurant {
+  _id: string;
+  title: string;
+  time: string;
+  imageUrl: string;
+  owner: string;
+  code: string;
+  logoUrl: string;
+  rating: number;
+  ratingCount: string;
+  coords: RestaurantCoordinates;
+}
+
+// First, let's define an interface for the additives since they have a consistent structure
+interface Additive {
+  id: number;
+  title: string;
+  price: string; // Note: Even though these are numbers, they're stored as strings in the data
+}
+
+// We'll create a string literal type for food types to ensure type safety
+// Notice how we include null since it appears in the data
+type FoodType =
+  | 'Main Course'
+  | 'Lunch'
+  | 'Dinner'
+  | 'Breakfast'
+  | 'Starter'
+  | 'Health'
+  | 'Vegan'
+  | 'Drink'
+  | 'Snack'
+  | 'Dessert'
+  | 'Non-Vegetarian'
+  | 'Barbecue'
+  | 'Grill'
+  | null;
+
+// The main Food interface that represents each food item
+export interface Food {
+  _id: string;
+  title: string;
+  foodTags: string[]; // Array of string tags describing the food
+  foodType: FoodType[]; // Array of food types from our defined types
+  code: string;
+  isAvailable: boolean;
+  restaurant: string; // This is a reference to the restaurant's _id
+  rating: number;
+  ratingCount: string; // Stored as string in the data
+  description: string;
+  price: number;
+  additives: Additive[];
+  imageUrl: string[]; // Array of image URLs since some foods have multiple images
+  __v: number; // Version key from MongoDB
+  category: string; // Reference to category _id
+  time: string; // Delivery/preparation time
+}
+
 const categories: Category[] = [
   {
     _id: '6537ece708ff5b7de97d0695',
@@ -85,7 +154,7 @@ const categories: Category[] = [
   },
 ];
 
-const restaurants = [
+const restaurants: Restaurant[] = [
   {
     _id: '6530ebbcc9e72013e5b65933',
     title: 'Lapisara Eatery',
@@ -176,7 +245,7 @@ const restaurants = [
   },
 ];
 
-const foods = [
+const foods: Food[] = [
   {
     _id: '65316968f94c6496dc84f3c1',
     title: 'Tiramisu',
@@ -218,7 +287,7 @@ const foods = [
       },
     ],
     imageUrl: [
-      'https://d326fntlu7tb1e.cloudfront.net/uploads/5c2a9ca8-eb07-400b-b8a6-2acfab2a9ee2-image001.webp',
+      'https://res.cloudinary.com/dtanzpdjc/image/upload/v1733917816/aydin-ghadakchi-lamor-yZnvwBC8MTw-unsplash_fyqgo6.jpg',
     ],
     __v: 0,
     category: '6531209dbbe4998e90af3fef',
@@ -265,7 +334,7 @@ const foods = [
       },
     ],
     imageUrl: [
-      'https://d326fntlu7tb1e.cloudfront.net/uploads/5c2a9ca8-eb07-400b-b8a6-2acfab2a9ee2-image001.webp',
+      'https://res.cloudinary.com/dtanzpdjc/image/upload/v1733917816/sestrjevitovschii-ina-7zfQ6sbWVyE-unsplash_milofs.jpg',
     ],
     __v: 2,
     category: '6531209dbbe4998e90af3fef',
@@ -312,7 +381,7 @@ const foods = [
       },
     ],
     imageUrl: [
-      'https://d326fntlu7tb1e.cloudfront.net/uploads/5c2a9ca8-eb07-400b-b8a6-2acfab2a9ee2-image001.webp',
+      'https://res.cloudinary.com/dtanzpdjc/image/upload/v1733917819/anna-pelzer-IGfIGP5ONV0-unsplash_unw0ax.jpg',
     ],
     __v: 0,
     category: '6531209dbbe4998e90af3fef',
@@ -349,8 +418,8 @@ const foods = [
       },
     ],
     imageUrl: [
-      'https://d326fntlu7tb1e.cloudfront.net/uploads/5c2a9ca8-eb07-400b-b8a6-2acfab2a9ee2-image001.webp',
-      'https://d326fntlu7tb1e.cloudfront.net/uploads/5c2a9ca8-eb07-400b-b8a6-2acfab2a9ee2-image001.webp',
+      'https://res.cloudinary.com/dtanzpdjc/image/upload/v1733917818/ivan-torres-MQUqbmszGGM-unsplash_uhw08r.jpg',
+      'https://res.cloudinary.com/dtanzpdjc/image/upload/v1733917822/amadeus-moga-H5Z8wovS9ic-unsplash_gaifde.jpg',
     ],
     __v: 0,
     category: '6531209dbbe4998e90af3fef',
@@ -397,7 +466,7 @@ const foods = [
       },
     ],
     imageUrl: [
-      'https://d326fntlu7tb1e.cloudfront.net/uploads/5c2a9ca8-eb07-400b-b8a6-2acfab2a9ee2-image001.webp',
+      'https://res.cloudinary.com/dtanzpdjc/image/upload/v1733917820/monika-grabkowska-dGxSJzhgW0o-unsplash_exuuv2.jpg',
     ],
     __v: 0,
     category: '6531209dbbe4998e90af3fef',
@@ -444,7 +513,7 @@ const foods = [
       },
     ],
     imageUrl: [
-      'https://d326fntlu7tb1e.cloudfront.net/uploads/5c2a9ca8-eb07-400b-b8a6-2acfab2a9ee2-image001.webp',
+      'https://res.cloudinary.com/dtanzpdjc/image/upload/v1733917823/victoria-shes-UC0HZdUitWY-unsplash_exuoek.jpg',
     ],
     __v: 0,
     category: '6531209dbbe4998e90af3fef',

@@ -2,7 +2,6 @@ declare module 'react-native-stock-star-rating' {
   import { FC } from 'react';
   import { ViewStyle } from 'react-native';
 
-  // The existing RatingProps interface
   export interface RatingProps {
     /**
      * State variable that will store the rating
@@ -12,7 +11,7 @@ declare module 'react-native-stock-star-rating' {
     /**
      * Function to set the rating which will be stored in your local state
      */
-    setRating: React.Dispatch<React.SetStateAction<undefined>>;
+    setRating: React.Dispatch<React.SetStateAction<number | null>>;
 
     /**
      * Max number of stars to show (Default 5)

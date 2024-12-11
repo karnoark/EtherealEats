@@ -1,11 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { RatingInput } from 'react-native-stock-star-rating';
 
 import AssetImage from '@/components/AssetImage';
 import { COLORS, SIZES } from '@/constants/theme';
+import { Restaurant } from '@/constants/uidata';
 
-const StoreComponent = ({ item, onPress }) => {
+interface StoreComponentProps {
+  item: Restaurant;
+  onPress: () => void;
+}
+
+const StoreComponent = ({ item, onPress }: StoreComponentProps) => {
+  const [rating, setRating] = useState<number | null>(null);
   return (
     <TouchableOpacity style={styles.wrapper} onPress={onPress}>
       <AssetImage
@@ -27,10 +34,11 @@ const StoreComponent = ({ item, onPress }) => {
           rating={item.rating}
           size={14}
           maxStars={5}
-          setRating={item.rating}
+          setRating={setRating}
           bordered={false}
           color={COLORS.primary}
         />
+        <Text style={styles.small}>{item.ratingCount} + ratings</Text>
       </View>
     </TouchableOpacity>
   );
