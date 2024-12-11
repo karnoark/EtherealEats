@@ -10,14 +10,26 @@ import {
 import { COLORS } from '@/constants/theme';
 import uidata, { Choice } from '@/constants/uidata';
 
-const ChoicesList = () => {
+interface ChoicesListRenderProps {
+  setSelectedChoice: React.Dispatch<React.SetStateAction<string | null>>;
+  setSelectedSection: React.Dispatch<React.SetStateAction<string | null>>;
+}
+
+const ChoicesList = ({
+  setSelectedChoice,
+  setSelectedSection,
+}: ChoicesListRenderProps) => {
   const [selected, setSelected] = useState<string | null>(null);
 
   const handlePress = (item: Choice) => {
     if (selected === item.value) {
       setSelected(null);
+      setSelectedChoice(null);
+      setSelectedSection(null);
     } else {
       setSelected(item.value);
+      setSelectedChoice(item.value);
+      setSelectedSection('restaurants');
     }
   };
 

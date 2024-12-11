@@ -91,7 +91,7 @@ const restaurants = [
     title: 'Lapisara Eatery',
     time: '15 min',
     imageUrl:
-      'https://d326fntlu7tb1e.cloudfront.net/uploads/5c2a9ca8-eb07-400b-b8a6-2acfab2a9ee2-image001.webp',
+      'https://res.cloudinary.com/dtanzpdjc/image/upload/v1733900092/alex-munsell-Yr4n8O_3UPc-unsplash_hoixyt.jpg',
     owner: 'fdfsdfsdfs',
     code: '41007428',
     logoUrl:
@@ -113,7 +113,7 @@ const restaurants = [
     title: 'Burger King',
     time: '30 min',
     imageUrl:
-      'https://d326fntlu7tb1e.cloudfront.net/uploads/5c2a9ca8-eb07-400b-b8a6-2acfab2a9ee2-image001.webp',
+      'https://res.cloudinary.com/dtanzpdjc/image/upload/v1733900091/amirali-mirhashemian-jh5XyK4Rr3Y-unsplash_zsqdda.jpg',
     owner: 'sjgdsjgfjshhjs',
     code: '41007428',
     logoUrl:
@@ -135,7 +135,7 @@ const restaurants = [
     title: 'La Foods',
     time: '25 min',
     imageUrl:
-      'https://d326fntlu7tb1e.cloudfront.net/uploads/5c2a9ca8-eb07-400b-b8a6-2acfab2a9ee2-image001.webp',
+      'https://res.cloudinary.com/dtanzpdjc/image/upload/v1733900091/calum-lewis-8Nc_oQsc2qQ-unsplash_iupo9l.jpg',
     owner: 'fgdgdfgd',
     code: '41007428',
     logoUrl:
@@ -157,7 +157,7 @@ const restaurants = [
     title: 'Italian Restaurant',
     time: '35 min',
     imageUrl:
-      'https://d326fntlu7tb1e.cloudfront.net/uploads/5c2a9ca8-eb07-400b-b8a6-2acfab2a9ee2-image001.webp',
+      'https://res.cloudinary.com/dtanzpdjc/image/upload/v1733900091/dillon-kydd-FWsuD5jGBMo-unsplash_ska55l.jpg',
     owner: 'sjgdsjgfjshhjs',
     code: '41007428',
     logoUrl:
