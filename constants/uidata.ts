@@ -41,7 +41,7 @@ export interface Restaurant {
 }
 
 // First, let's define an interface for the additives since they have a consistent structure
-interface Additive {
+export interface Additive {
   id: number;
   title: string;
   price: string; // Note: Even though these are numbers, they're stored as strings in the data

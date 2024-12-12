@@ -65,7 +65,7 @@ const Page = () => {
 
           <Divider />
 
-          <Heading heading={'Nearby Restaurants'} onPress={() => {}} />
+          <Heading heading={'New Food List'} onPress={() => {}} />
 
           <NewFoodList />
 

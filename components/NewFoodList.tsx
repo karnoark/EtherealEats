@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import React from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 
@@ -14,7 +15,18 @@ const NewFoodList = () => {
         style={{ marginTop: 5, rowGap: 10 }}
         scrollEnabled
         renderItem={({ item }) => (
-          <FoodComponent item={item} onPress={() => {}} />
+          <FoodComponent
+            item={item}
+            onPress={() => {
+              console.log('onPress clicked');
+              router.push({
+                pathname: '/Food/food',
+                params: {
+                  foodData: JSON.stringify(item),
+                },
+              });
+            }}
+          />
         )}
       />
     </View>

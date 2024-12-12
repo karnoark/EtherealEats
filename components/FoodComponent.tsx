@@ -12,7 +12,7 @@ interface FoodComponentProps {
 
 const FoodComponent = ({ item, onPress }: FoodComponentProps) => {
   return (
-    <TouchableOpacity style={styles.wrapper}>
+    <TouchableOpacity style={styles.wrapper} onPress={onPress}>
       <AssetImage
         data={{ uri: item.imageUrl[0] }}
         width={SIZES.width - 60}
