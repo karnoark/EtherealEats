@@ -142,6 +142,24 @@ export default function RootLayout() {
               presentation: 'modal',
             }}
           />
+          <Stack.Screen
+            name="RestaurantPage"
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="restaurant"
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="AddRating"
+            options={{
+              headerShown: false,
+            }}
+          />
           <Stack.Screen name="+not-found" />
         </Stack>
       </AddressProvider>

@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import React from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 
@@ -14,7 +15,15 @@ const NearbyRestaurants = () => {
         style={{ marginTop: 5, rowGap: 10 }}
         scrollEnabled
         renderItem={({ item }) => (
-          <StoreComponent item={item} onPress={() => {}} />
+          <StoreComponent
+            item={item}
+            onPress={() => {
+              router.push({
+                pathname: '/restaurant',
+                params: { item: JSON.stringify(item) },
+              });
+            }}
+          />
         )}
       />
     </View>
