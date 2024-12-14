@@ -11,8 +11,10 @@ import React from 'react';
 
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { COLORS } from '@/constants/theme';
+import { useLoginContext } from '@/context/LoginContext';
 
 export default function TabLayout() {
+  const { login, setLogin } = useLoginContext();
   return (
     <Tabs
       screenOptions={{

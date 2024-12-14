@@ -1,14 +1,19 @@
+/* eslint-disable react/no-unstable-nested-components */
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFonts } from 'expo-font';
 import * as Location from 'expo-location';
-import { Stack } from 'expo-router';
+import { Link, router, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useCallback, useEffect, useState } from 'react';
 
 import 'react-native-reanimated';
+import { TouchableOpacity } from 'react-native';
+
 import Fonts from '@/constants/fonts';
 import { COLORS } from '@/constants/theme';
 import { Restaurant } from '@/constants/uidata';
+import { LoginProvider } from '@/context/LoginContext';
 import { RestaurantProvider } from '@/context/RestaurantContext';
 import {
   UserLocationContext,
@@ -23,6 +28,8 @@ import {
   LocationService,
 } from '@/services/locationService';
 import { promiseWithTimeout, TimeoutError } from '@/utils/promiseWithTimeout';
+
+import { Ionicons } from '@expo/vector-icons';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -53,6 +60,7 @@ export default function RootLayout() {
   const [locationError, setLocationError] = useState<string | null>(null);
   const [isLoadingLocation, setIsLoadingLocation] = useState(true);
   const [retryAttempt, setRetryAttempt] = useState(0);
+  const [login, setLogin] = useState(false);
   const MAX_RETRIES = 3;
 
   const [fontsLoaded] = useFonts(Fonts);
@@ -112,12 +120,22 @@ export default function RootLayout() {
     if (fontsLoaded) {
       onLayoutRootView();
       initializeLocation();
+      loginStatus();
     }
   }, [fontsLoaded, onLayoutRootView, initializeLocation]);
 
   if (!fontsLoaded) {
     return null;
   }
+
+  const loginStatus = async () => {
+    const userToken = await AsyncStorage.getItem('token');
+    if (userToken !== null) {
+      setLogin(true);
+    } else {
+      setLogin(false);
+    }
+  };
 
   return (
     <LocationProvider
@@ -131,41 +149,95 @@ export default function RootLayout() {
     >
       <AddressProvider value={{ address, setAddress }}>
         <RestaurantProvider value={{ restaurantObj, setRestaurantObj }}>
-          <StatusBar
-            style="dark"
-            hidden={false}
-            backgroundColor={COLORS.lightWhite}
-          />
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="Food/food" options={{ headerShown: false }} />
-            <Stack.Screen
-              name="Food/order"
-              options={{
-                headerShown: false,
-                presentation: 'modal',
-              }}
+          <LoginProvider value={{ login, setLogin }}>
+            <StatusBar
+              style="dark"
+              hidden={false}
+              backgroundColor={COLORS.lightWhite}
             />
-            <Stack.Screen
-              name="RestaurantPage"
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name="restaurant"
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name="AddRating"
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen name="+not-found" />
-          </Stack>
+            <Stack>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen name="Food/food" options={{ headerShown: false }} />
+              <Stack.Screen
+                name="Food/order"
+                options={{
+                  headerShown: false,
+                  presentation: 'modal',
+                }}
+              />
+              <Stack.Screen
+                name="RestaurantPage"
+                options={{
+                  headerShown: false,
+                }}
+              />
+              <Stack.Screen
+                name="restaurant"
+                options={{
+                  headerShown: false,
+                }}
+              />
+              <Stack.Screen
+                name="AddRating"
+                options={{
+                  headerShown: false,
+                }}
+              />
+              <Stack.Screen name="+not-found" />
+              <Stack.Screen
+                name="(authentication)/login"
+                options={{
+                  title: '',
+                  headerBackTitle: '',
+                  headerShadowVisible: false,
+                  headerStyle: {
+                    backgroundColor: COLORS.lightWhite,
+                  },
+                  headerLeft: () => (
+                    <TouchableOpacity onPress={router.back}>
+                      <Ionicons
+                        name="arrow-back"
+                        size={34}
+                        color={COLORS.primary}
+                      />
+                    </TouchableOpacity>
+                  ),
+                  headerRight: () => (
+                    <Link href={'/help'} asChild>
+                      <TouchableOpacity>
+                        <Ionicons
+                          name="help-circle-outline"
+                          size={34}
+                          color={COLORS.primary}
+                        />
+                      </TouchableOpacity>
+                    </Link>
+                  ),
+                }}
+              />
+
+              <Stack.Screen
+                name="(authentication)/signup"
+                options={{
+                  title: '',
+                  headerBackTitle: '',
+                  headerShadowVisible: false,
+                  headerStyle: {
+                    backgroundColor: COLORS.lightWhite,
+                  },
+                  headerLeft: () => (
+                    <TouchableOpacity onPress={router.back}>
+                      <Ionicons
+                        name="arrow-back"
+                        size={34}
+                        color={COLORS.primary}
+                      />
+                    </TouchableOpacity>
+                  ),
+                }}
+              />
+            </Stack>
+          </LoginProvider>
         </RestaurantProvider>
       </AddressProvider>
     </LocationProvider>
