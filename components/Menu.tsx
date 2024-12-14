@@ -1,11 +1,14 @@
+import { router } from 'expo-router';
 import React from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 
+import FoodTile from '@/components/FoodTile';
 import uidata from '@/constants/uidata';
 import { useRestaurantContext } from '@/context/RestaurantContext';
 
 const Menu = () => {
   const { restaurantObj, setRestaurantObj } = useRestaurantContext();
+  console.log('restaurantObj: ', restaurantObj);
   return (
     <View style={{ marginTop: 5 }}>
       <FlatList
@@ -13,11 +16,20 @@ const Menu = () => {
         showsVerticalScrollIndicator={false}
         style={{ marginTop: 5 }}
         keyExtractor={item => item._id}
-        // numColumns={2}
         scrollEnabled
-        renderItem={item => (
+        renderItem={({ item }) => (
           <View>
-            <Text>as;dfkl</Text>
+            <FoodTile
+              item={item}
+              showDetails={() => {
+                router.push({
+                  pathname: '/Food/food',
+                  params: {
+                    foodData: JSON.stringify(item),
+                  },
+                });
+              }}
+            />
           </View>
         )}
       />
