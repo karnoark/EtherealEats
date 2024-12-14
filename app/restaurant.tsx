@@ -1,6 +1,6 @@
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Redirect, router, useLocalSearchParams } from 'expo-router';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { RatingInput } from 'react-native-stock-star-rating';
 
@@ -8,13 +8,63 @@ import RestaurantPage from '@/app/RestaurantPage';
 import AssetImage from '@/components/AssetImage';
 import { COLORS, SIZES } from '@/constants/theme';
 import { Restaurant } from '@/constants/uidata';
+import { useLocationContext } from '@/context/UserLocationContext';
+import GoogleApiServices, {
+  DistanceMatrixResult,
+} from '@/services/GoogleApiServices';
 
 const Page = () => {
+  const [distanceTime, setDistanceTime] = useState<DistanceMatrixResult | null>(
+    null,
+  );
   const params = useLocalSearchParams();
   const item: Restaurant = params.item
     ? JSON.parse(params.item as string)
     : null;
   console.log('item: ', item);
+
+  const { location, setLocation } = useLocationContext();
+  console.log(
+    'latitude: ',
+    location?.coords.latitude,
+    ' longitude: ',
+    location?.coords.longitude,
+  );
+  console.log(
+    'latitude: ',
+    item?.coords.latitude,
+    ' longitude: ',
+    item?.coords.longitude,
+  );
+
+  useEffect(() => {
+    if (
+      location?.coords?.latitude &&
+      location?.coords?.longitude &&
+      item?.coords?.latitude &&
+      item?.coords?.longitude
+    ) {
+      GoogleApiServices.calculateDistanceAndTime(
+        item.coords.latitude,
+        item.coords.longitude,
+        location.coords.latitude,
+        location.coords.longitude,
+      ).then(result => {
+        if (result) {
+          setDistanceTime(result);
+        }
+      });
+    } else {
+      console.error("your location or restaurant's location is unavailable");
+    }
+    console.log(distanceTime);
+  }, [item, location, distanceTime]);
+
+  //traveling time + food preperation time
+  const totalTime =
+    GoogleApiServices.extractNumbers(distanceTime?.duration ?? '')[0] +
+    GoogleApiServices.extractNumbers(item?.time ?? '')[0];
+
   return (
     <View style={{ flex: 1 }}>
       <View style={{ flex: 4 }}>
@@ -54,7 +104,29 @@ const Page = () => {
           </View>
         </View>
       </View>
-      <View style={{ flex: 3 }} />
+      <View style={{ marginTop: 8, marginBottom: 10, marginHorizontal: 8 }}>
+        <Text style={styles.title}>{item.title}</Text>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={[styles.small, { color: COLORS.gray }]}>Distance</Text>
+          <Text style={[styles.small, { fontFamily: 'regular' }]}>
+            {distanceTime?.distance ?? 0.88}
+          </Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={[styles.small, { color: COLORS.gray }]}>
+            Prep and Delivery Time
+          </Text>
+          <Text style={[styles.small, { fontFamily: 'regular' }]}>
+            {isNaN(totalTime) ? '30mins' : totalTime}
+          </Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={[styles.small, { color: COLORS.gray }]}>Cost</Text>
+          <Text style={[styles.small, { fontFamily: 'regular' }]}>
+            {distanceTime?.finalPrice ?? '108₹'}
+          </Text>
+        </View>
+      </View>
       <View style={{ flex: 6 }}>
         <RestaurantPage />
       </View>
@@ -74,6 +146,11 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 22,
+    fontFamily: 'medium',
+    color: COLORS.black,
+  },
+  small: {
+    fontSize: 13,
     fontFamily: 'medium',
     color: COLORS.black,
   },

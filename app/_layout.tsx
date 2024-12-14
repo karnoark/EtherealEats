@@ -8,6 +8,8 @@ import { useCallback, useEffect, useState } from 'react';
 import 'react-native-reanimated';
 import Fonts from '@/constants/fonts';
 import { COLORS } from '@/constants/theme';
+import { Restaurant } from '@/constants/uidata';
+import { RestaurantProvider } from '@/context/RestaurantContext';
 import {
   UserLocationContext,
   LocationProvider,
@@ -47,6 +49,7 @@ export default function RootLayout() {
   const [address, setAddress] = useState<
     Location.LocationGeocodedAddress[] | null
   >(null);
+  const [restaurantObj, setRestaurantObj] = useState<Restaurant | null>(null);
   const [locationError, setLocationError] = useState<string | null>(null);
   const [isLoadingLocation, setIsLoadingLocation] = useState(true);
   const [retryAttempt, setRetryAttempt] = useState(0);
@@ -127,41 +130,43 @@ export default function RootLayout() {
       }}
     >
       <AddressProvider value={{ address, setAddress }}>
-        <StatusBar
-          style="dark"
-          hidden={false}
-          backgroundColor={COLORS.lightWhite}
-        />
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="Food/food" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="Food/order"
-            options={{
-              headerShown: false,
-              presentation: 'modal',
-            }}
+        <RestaurantProvider value={{ restaurantObj, setRestaurantObj }}>
+          <StatusBar
+            style="dark"
+            hidden={false}
+            backgroundColor={COLORS.lightWhite}
           />
-          <Stack.Screen
-            name="RestaurantPage"
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="restaurant"
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="AddRating"
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen name="+not-found" />
-        </Stack>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="Food/food" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="Food/order"
+              options={{
+                headerShown: false,
+                presentation: 'modal',
+              }}
+            />
+            <Stack.Screen
+              name="RestaurantPage"
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="restaurant"
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="AddRating"
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+        </RestaurantProvider>
       </AddressProvider>
     </LocationProvider>
   );

@@ -2,22 +2,26 @@ import * as React from 'react';
 import { View, useWindowDimensions } from 'react-native';
 import { TabView, SceneMap } from 'react-native-tab-view';
 
-const FirstRoute = () => {
-  return <View style={{ flex: 1, backgroundColor: '#ff4081' }} />;
-};
+import Directions from '@/components/Directions';
+import Menu from '@/components/Menu';
+import New from '@/components/New';
 
-const SecondRoute = () => {
-  return <View style={{ flex: 1, backgroundColor: '#ff4' }} />;
-};
+// const FirstRoute = () => {
+//   return <Menu />;
+// };
 
-const ThirdRoute = () => {
-  return <View style={{ flex: 1, backgroundColor: '#8389' }} />;
-};
+// const SecondRoute = () => {
+//   return <Directions />;
+// };
+
+// const ThirdRoute = () => {
+//   return <New />;
+// };
 
 const renderScene = SceneMap({
-  first: FirstRoute,
-  second: SecondRoute,
-  third: ThirdRoute,
+  first: Menu,
+  second: Directions,
+  third: New,
 });
 
 const routes = [

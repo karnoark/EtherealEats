@@ -4,8 +4,10 @@ import { FlatList, StyleSheet, Text, View } from 'react-native';
 
 import StoreComponent from '@/components/StoreComponent';
 import uidata from '@/constants/uidata';
+import { useRestaurantContext } from '@/context/RestaurantContext';
 
 const NearbyRestaurants = () => {
+  const { restaurantObj, setRestaurantObj } = useRestaurantContext();
   return (
     <View style={{ marginLeft: 12 }}>
       <FlatList
@@ -18,6 +20,7 @@ const NearbyRestaurants = () => {
           <StoreComponent
             item={item}
             onPress={() => {
+              setRestaurantObj(item);
               router.push({
                 pathname: '/restaurant',
                 params: { item: JSON.stringify(item) },

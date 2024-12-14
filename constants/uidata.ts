@@ -157,7 +157,7 @@ const categories: Category[] = [
 const restaurants: Restaurant[] = [
   {
     _id: '6530ebbcc9e72013e5b65933',
-    title: 'Lapisara Eatery',
+    title: 'New Hanuman Executive',
     time: '15 min',
     imageUrl:
       'https://res.cloudinary.com/dtanzpdjc/image/upload/v1733900092/alex-munsell-Yr4n8O_3UPc-unsplash_hoixyt.jpg',
@@ -169,8 +169,8 @@ const restaurants: Restaurant[] = [
     ratingCount: '6765',
     coords: {
       id: '2023',
-      latitude: 37.78792117665919,
-      longitude: -122.41325651079953,
+      latitude: 16.847068897379017,
+      longitude: 74.59525889792936,
       address: '698 Post St, San Francisco, CA 94109, United States',
       title: 'Lapisara Eatery',
       latitudeDelta: 0.0122,
